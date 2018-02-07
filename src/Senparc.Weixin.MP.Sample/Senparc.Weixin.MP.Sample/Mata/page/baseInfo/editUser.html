@@ -1,0 +1,130 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            height: 100%;
+            width: 100%;
+        }
+
+        .tableCss {
+            border-spacing: 4px;
+        }
+
+            .tableCss tr td {
+                height: 40px;
+                padding: 0px 5px;
+                line-height: 40px;
+            }
+
+        input {
+            height: 25px;
+        }
+
+
+      .layui-form-item {
+            width: 650px;
+            float: left;
+            position: relative;
+            clear: none;
+            margin-bottom: 0px !important;
+            margin-top: 10px;
+            margin-left: 15px;
+        }
+
+        
+        #accountType{
+                height: 38px  !important;
+                width: 100%  !important;
+        }
+    </style>
+    <link href="../../layui/css/layui.css" rel="stylesheet" />
+    <script src="../../js/jquery.js"></script>
+    <script src="../../js/jquery.min.js"></script>
+    <script src="../../js/jquery.cookie.js"></script>
+    <script src="../../js/Common.js"></script>
+    <script src="../../layui/layui.js"></script>
+    <script src="EditUser.js"></script>
+</head>
+<body>
+    <div style="display: block;">
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="color: red;">*登录账户</label>
+            <div class="layui-input-block">
+                <input id="userName" type="text" name="title" lay-verify="title" autocomplete="off" placeholder="" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="color: red;">*密码</label>
+            <div class="layui-input-block">
+                <input id="passWord" type="text" name="title" lay-verify="title" autocomplete="off" placeholder="" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">*客户代码</label>
+            <div class="layui-input-block">
+                <input id="code" type="text" name="title" lay-verify="title" autocomplete="off" placeholder="" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">*公司名称</label>
+            <div class="layui-input-block">
+                <input id="memo" type="text" name="title" lay-verify="title" autocomplete="off" placeholder="" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">联系人</label>
+            <div class="layui-input-block">
+                <input id="OwnerName" type="text" name="title" lay-verify="title" autocomplete="off" placeholder="" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label" >联系电话</label>
+            <div class="layui-input-block">
+                <input id="phone" type="text" name="title" maxlength="11" onkeyup="value=value.replace(/[^\d]/g,'')" lay-verify="title" autocomplete="off" placeholder="" class="layui-input">
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">*帐号类型</label>
+            <div class="layui-input-block">
+                <select id="accountType" name="interest" lay-filter="aihao">
+                   <!-- <option value="1">客户</option>
+                    <option value="2" selected="">管理员</option>
+                    <option value="3">监控人员</option>-->
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">上级用户</label>
+            <div class="layui-input-block">
+                <input id="parentName" type="text" name="title" lay-verify="title" autocomplete="off" placeholder="" class="layui-input">
+            </div>
+        </div>
+
+         <div class="layui-form-item">
+            <label class="layui-form-label">上级公司</label>
+            <div class="layui-input-block">
+                <input id="parentmemo" type="text" name="title" lay-verify="title" autocomplete="off" placeholder="" class="layui-input">
+            </div>
+        </div>
+
+        <button style="margin-left: 40%; margin-top: 20px" class="layui-btn" onclick="onSureClick()">确认</button>
+        <button style="margin-top: 20px" class="layui-btn" onclick="onCancelClick()">取消</button>
+    </div>
+</body>
+</html>

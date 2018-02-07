@@ -1,0 +1,51 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <style>
+        * {
+            margin:0;
+           padding:0;
+        }
+        body {
+            height:100%;
+            width:100%;
+        }      
+    </style> 
+    <script src="../../js/jquery.js"></script>
+    <script src="../../js/jquery.min.js"></script>
+    <script src="../../js/jquery.cookie.js"></script>
+    <script src="../../js/Common.js"></script>
+
+
+    <link href="../../js/zTree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" />
+    <script src="bindVehGroup.js"></script>
+</head>
+<body >
+    <form id="form" runat="server">
+        <div id="treeLeft" style="float: left; margin: 4px; height: 90%;width:48%; border: 1px solid #9d9999;">
+             <div id="groupAllTree" class="ztree" style="padding: 5px; height: 340px;">
+            </div>
+        </div>
+        <div id="treeRighht" style="float: left; margin: 4px; border: 1px solid #9d9999; width:48%; height:  90%;">           
+           <div id="groupTree" class="ztree" style="padding: 5px;  height:  340px;">
+            </div>
+        </div>
+        <input type="button" name="取消" value="取消" style="width: 80px; float: right; margin-top: 15px; margin-right: 200px;" onclick="onCancelClick()" />
+        <input id="btnConfirm" type="button" name="确定" value="确定"  onclick="onSureClick()" style="width: 80px; margin-right: 50px; margin-top: 15px; float: right;" />
+    </form>
+    
+     <script src="../../js/zTree/jquery.ztree.all-3.5.js"></script>
+    <script src="../../js/zTree/jquery.ztree.core-3.5.js"></script>
+    <script src="../../js/zTree/jquery.ztree.excheck-3.5.js"></script>
+    <script src="../../js/zTree/jquery.ztree.exedit-3.5.js"></script>
+    <script src="../../js/zTree/jquery.ztree.exedit.js"></script>
+    <script src="../../js/zTree/jquery.ztree.exhide-3.5.js"></script>
+    <script src="../../js/layer/layer.js"></script>
+    <script src="../../js/layui/layui.js"></script>
+    <script src="../../js/timepicker/jquery.datetimepicker.js"></script>
+</body>
+</html>
+
+

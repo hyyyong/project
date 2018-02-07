@@ -1,0 +1,111 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>OAuth2.0授权测试</title>
+<style type="text/css">
+    * {
+        margin: 0;
+        padding: 0;
+        font-size: 14px;
+    }
+
+    #main {
+        width: 100%;
+        height: 100%;
+    }
+
+    a {
+        color: #333;
+        text-decoration: none;
+    }
+
+    .nav {
+        list-style: none;
+        height: 50px;
+        border-bottom: 5px solid #F60;
+        margin-top: 0px;
+        padding-left: 150px;
+        background-color: #003399;
+    }
+
+        .nav li {
+            float: left;
+        }
+
+            .nav li a {
+                display: block;
+                height: 50px;
+                text-align: center;
+                line-height: 50px;
+                width: 100px;
+                background-color: #003399;
+                /*background: #FF592D;*/
+                margin-left: 1px;
+                color: #fff;
+            }
+
+                .nav li a.on, .nav li a:hover {
+                    background: #F60;
+                    color: #fff;
+                }
+</style>
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    <link href="~/Views/OAuth2/login.css" rel="stylesheet" />
+</head>
+<body >   
+	<div id="main">
+        @*上导航栏*@
+       <div id="main-topPanel"  style="min-width: 1420px;">	
+			<div id="rightTabs" class="nav">
+                <ul>
+                    <li><a href="#">首　　页</a></li>
+                    <li><a href="#">监控中心</a></li>
+                    <li><a href="#">运营管理</a></li>
+                    <li><a href="#">轨迹回放</a></li>
+                    <li><a href="#">统计报表</a></li>
+                </ul>
+			</div>
+		</div>
+
+        <div id="main-topPanel">
+            <div id="mainPanel-yunying" class="mainPanel current" style="height: 629px;">
+                <div id="leftPanel" style="width: 250px; height: 629px;">
+                    <iframe id="left-yunying" width="100%" height="100%" frameborder="0" src="OperationManagement/OperationManagement.html"></iframe>
+
+                </div>
+                <div id="rightPanel" style="width: 1185px; height: 629px; margin-left: 250px;">
+                    <div class="tabManage">
+                        <span class="tab-page prev"></span>
+                        <div class="tab-box" style="margin: 0px 39px;">
+                            <ul style="left: 0px;">
+                                <li class="tabPage cur" style="width: 120px;"><div class="text"><a title="车辆信息">车辆信息</a></div><i class="close"></i></li>
+                                <li class="tabPage" style="width: 120px;"><div class="text"><a title="车队管理">车队管理</a></div><i class="close"></i></li>
+                                <li class="tabPage" style="width: 120px;"><div class="text"><a title="设备管理">设备管理</a></div><i class="close"></i></li>
+                                <li class="tabPage" style="width: 120px;"><div class="text"><a title="公司信息">公司信息</a></div><i class="close"></i></li>
+                                <li class="tabPage" style="width: 120px;"><div class="text"><a title="角色管理">角色管理</a></div><i class="close"></i></li>
+                                <li class="tabPage" style="width: 120px;"><div class="text"><a title="用户信息">用户信息</a></div><i class="close"></i></li>
+                            </ul>
+                        </div><span class="tab-page next"></span></div>
+                    <div class="iframeManage" style="height: 599px;">
+                        <div class="iframePage cur" style="height: 599px;"><iframe width="100%" height="100%" frameborder="0" src="OperationManagement/AllVehicleInfo.html"></iframe></div>
+                        <div class="iframePage" style="height: 599px;"><iframe width="100%" height="100%" frameborder="0" src="OperationManagement/VehicleTeam.html"></iframe></div>
+                        <div class="iframePage" style="height: 599px;"><iframe width="100%" height="100%" frameborder="0" src="OperationManagement/AllDeviceInfo.html"></iframe></div>
+                        <div class="iframePage" style="height: 599px;"><iframe width="100%" height="100%" frameborder="0" src="OperationManagement/AllCompanyInfo.html"></iframe></div>
+                        <div class="iframePage" style="height: 599px;"><iframe width="100%" height="100%" frameborder="0" src="OperationManagement/AllRoleInfo.html"></iframe></div>
+                        <div class="iframePage" style="height: 599px;"><iframe width="100%" height="100%" frameborder="0" src="OperationManagement/AllUserInfo.html"></iframe></div></div>
+                </div>
+            </div>
+        </div> 
+	</div>
+
+</body>
+
+
+</html>

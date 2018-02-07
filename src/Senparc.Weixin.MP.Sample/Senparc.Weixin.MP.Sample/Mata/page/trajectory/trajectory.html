@@ -1,0 +1,137 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="www.divmb.com creativity">
+    <meta name="author" content="www.divmb.com">
+    <link rel="shortcut icon" href="../monitor/assets/images/favicon_1.ico">
+    <title>轨迹回放</title>
+    <!--Morris Chart CSS -->
+    <link rel="stylesheet" href="../monitor/assets/plugins/morris/morris.css">
+    <link href="../monitor/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="../monitor/assets/css/core.css" rel="stylesheet" type="text/css" />
+    <link href="../monitor/assets/css/components.css" rel="stylesheet" type="text/css" />
+    <link href="../monitor/assets/css/icons.css" rel="stylesheet" type="text/css" />
+    <link href="../monitor/assets/css/pages.css" rel="stylesheet" type="text/css" />
+    <link href="../monitor/assets/css/responsive.css" rel="stylesheet" type="text/css" />
+    <link href="../../js/zTree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" />
+    <link href="../../js/timepicker/jquery.datetimepicker.css" rel="stylesheet" />
+</head>
+<body class="fixed-left">
+    <!-- Begin page -->
+    <div id="wrapper">
+        <!-- Top Bar Start -->
+        <div class="topbar" style="height:100%;">
+            <!-- LOGO -->
+            <div class="topbar-left" style="display:none;">
+                <div class="text-center"><a href="index.html" class="logo"><i class="icon-magnet icon-c-logo"></i><span>Ub<i class="md md-album"></i>ld</span></a> </div>
+            </div>
+            <!-- Button mobile view to collapse sidebar menu -->
+            <div class="navbar navbar-default" role="navigation">
+                <div class="container">
+                    <div class="">
+                        <div class="pull-left">
+                            <ul class="nav navbar-nav navbar-right pull-right">
+                                <li class="hidden-xs"><a href="#" id="btn-fullscreen" class="waves-effect waves-light"><i class="icon-size-fullscreen"></i></a></li>
+                                <li class="hidden-xs"><a href="#" class="right-bar-toggle waves-effect waves-light"><i class="icon-settings"></i></a></li>
+                            </ul>
+                        </div>
+                        <!--/.nav-collapse -->
+                    </div>
+                </div>
+            </div>
+            <!-- Top Bar End -->
+
+            <div class="content-page text-right" style="height:100%;">
+                <footer class="footer text-right" style="height:100%;left:0;">
+                    <!-- 地图 -->
+                
+                        <!-- 地图 -->
+                    <div id="map" style="width: 100%;height:100%;"></div>
+              
+                    <!-- 地图 -->
+                    <!-- table -->
+                    <div id="tablePanel" style="overflow: hidden; width: 100%; height: 25px; bottom: 0px; position: fixed; z-index: 9999">
+                       <div id="history" style="top: 27px"></div>
+                    </div>
+                    <!-- table结束 -->
+
+                    <!-- 查询面板 -->                             
+                    <div id="PanelSearch" style="z-index: 990; width: 240px; height: 150px; background: #f8f8f8; border: 1px solid #CDCDCD; border-radius: 3px; position: fixed; top: 90px; right: 10px; overflow: hidden;">
+                        <!-- 右侧查询面板开始 -->
+                        <div id="panelSearch2" style="margin-top: 20px">
+                            <table id="searchTable" style="width: 100%;" cellspacing="6">
+                                <tr style="height: 30px">
+                                    <td style="text-align: right; width: 85px">选择车辆：
+                                    </td>
+                                    <td colspan="2" style="text-align: left;">
+                                        <input type="text" id="txtVehicle" style="width: 120px;" />
+                                        <img id="btnTree" src="../../Images/serach.jpg" alt="" style="width: 20px; vertical-align: bottom; height: 20px; border: 0; cursor: pointer;" />
+                                    </td>
+                                </tr>
+                                <tr style="height: 30px">
+                                    <td style="text-align: right;">开始时间：
+                                    </td>
+                                    <td colspan="2" style="text-align: left;">                                        
+                                         <input placeholder="请选择开始时间" class="" readonly="readonly"  name="appDateTime" id="txtStartDate" type="text" >
+                                    </td>
+                                </tr>
+                                <tr style="height: 30px">
+                                    <td style="text-align: right;">结束时间：
+                                    </td>
+                                    <td colspan="2" style="text-align: left;">
+                                       <input placeholder="请选择结束时间" class="" readonly="readonly"  name="appDateTime" id="txtEndDate" type="text" >
+                                    </td>
+                                </tr>
+                                <tr style="height: 30px">
+                                    <td colspan="3" style="text-align: left;">
+                                        <div id="btnSearch" onclick="searchClick()" style="float: right; height: 20px; cursor: pointer; margin: 2px 28px 2px 2px; width: 90px; text-align: center; background-color: #3896DD; color: White; border: 1px solid #0074CC">
+                                            <img src="../../Images/searchWhite.png" style="height: 13px; vertical-align: middle; margin: 0 3px 0 0" />查询
+                                <a></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- 查询面板 -->
+                </footer>
+            </div>
+
+        </div>
+
+        <script>
+            var resizefunc = [];
+        </script>
+        <script src="http://webapi.amap.com/maps?v=1.3&key=d5229e22dc8ebcd291e4a072e5f2a8bf" language="javascript"></script>
+        <!-- jQuery  -->
+        
+        <script src="../monitor/assets/js/jquery.min.js"></script>
+        <script src="../../js/jquery.cookie.js"></script>       
+        <script src="../monitor/assets/js/modernizr.min.js"></script>
+        <script src="../monitor/assets/js/jquery.min.js"></script>
+        <script src="../monitor/assets/js/bootstrap.min.js"></script>       
+        <script src="../monitor/assets/js/detect.js"></script>
+        <script src="../monitor/assets/js/fastclick.js"></script>
+        <script src="../monitor/assets/js/jquery.slimscroll.js"></script>
+        <script src="../monitor/assets/js/jquery.blockUI.js"></script>
+        <script src="../monitor/assets/js/waves.js"></script>
+        <script src="../monitor/assets/js/wow.min.js"></script>
+        <script src="../monitor/assets/js/jquery.nicescroll.js"></script>
+        <script src="../monitor/assets/js/jquery.scrollTo.min.js"></script>
+        <script src="../monitor/assets/plugins/peity/jquery.peity.min.js"></script>
+        <!-- jQuery  -->
+        <script src="../monitor/assets/plugins/waypoints/lib/jquery.waypoints.js"></script>
+        <script src="../monitor/assets/plugins/counterup/jquery.counterup.min.js"></script>
+        <script src="../monitor/assets/plugins/morris/morris.min.js"></script>
+        <script src="../monitor/assets/plugins/raphael/raphael-min.js"></script>
+        <script src="../monitor/assets/plugins/jquery-knob/jquery.knob.js"></script>
+        <script src="../monitor/assets/pages/jquery.dashboard.js"></script>
+        <script src="../monitor/assets/js/jquery.core.js"></script>
+        <script src="../monitor/assets/js/jquery.app.js"></script>
+        <script src="trajectory.js"></script>
+        <script src="trajectoryGaoDeMap.js"></script>
+        <script src="../../js/timepicker/jquery.datetimepicker.js"></script>
+</body>
+</html>

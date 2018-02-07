@@ -1,0 +1,76 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>实时监控</title>
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")  
+    <script src="~/Content/asyncbox/AsyncBox.v1.4.5.js"></script>
+    <link href="~/Content/asyncbox/skins/ZCMS/asyncbox.css" rel="stylesheet" />
+    <link href="~/Content/CSS/swiper.min.css" rel="stylesheet" />
+    <link href="~/Content/CSS/Track.css" rel="stylesheet" />
+    <script src="~/Content/JS/jquery.cookie.js"></script>
+    <script src="~/Scripts/jquery-1.7.1.js"></script>
+    <script src="~/Content/JS/jquery.js"></script>
+    <script src="~/Content/JS/Track.js"></script>
+    <script src="~/Content/JS/swiper.jquery.min.js"></script>
+     <script src="http://webapi.amap.com/maps?v=1.3&key=57311c86d4f84f67b2518854ab02ca88&plugin=AMap.Geocoder"></script>
+  
+         <style>
+             html {
+                 height: 100%;
+                 margin: 0;
+             }
+
+             body {
+                 margin: 0;
+                 padding: 0;
+                 min-height: 100%;
+                 _height: 100%;
+               
+             }
+
+             div {
+                 margin: 0;
+                 padding: 0;
+               
+             }
+             p {text-indent: 1cm}
+         </style>
+   
+</head>
+<body id="mbody">
+      <div class="swiper-container" id="myshow_swipe">
+            <div class="swiper-wrapper">
+
+                <!--个人监控中心页面-->
+                <div  class="swiper-slide">
+                 
+                    <div id="map2"></div>
+                    <div id="container">                        
+                        <img src="~/Images/Image/ic_maptype2.png" class="qiuguan "/>
+                        <img src="~/Images/Image/ic_traffic_0.png" class="dengguan yyy"/>
+                      
+                    </div>
+                </div>
+                <div  class="swiper-slide" style="height:0px;" id="xxxx">
+             
+
+                </div>
+          <p>
+            <input type="text" id="wxid" class="input" style="display:none;" value="@ViewData["wxid"]" />  
+            <input type="text" id="url" class="input" style="display:none;" value="@ViewData["url"]" />       
+         </p>
+         </div> 
+
+
+    
+</body>
+</html>
+

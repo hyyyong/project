@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Users>
+  <!--我是一段注释文字-->
+  <user name="张平">
+    <username><![CDATA[批注]]></username>
+    <pwd><![CDATA[批注]]></pwd>
+    <userMd5><![CDATA[批注]]></userMd5>
+    <sUpdateTime><![CDATA[批注]]></sUpdateTime>
+    <openId><![CDATA[批注]]></openId>
+    <userId><![CDATA[批注]]></userId>
+    <userType><![CDATA[批注]]></userType>
+    <groupId><![CDATA[307408]]></groupId>
+  </user>
+  <user name="KM-01-19">
+    <username><![CDATA[KM-01-19]]></username>
+    <pwd><![CDATA[123]]></pwd>
+    <userMd5><![CDATA[306c16ca-d5c7-4aff-bc5f-faf12c1b2a8c]]></userMd5>
+    <sUpdateTime><![CDATA[2017-06-10 14:11:18]]></sUpdateTime>
+    <openId><![CDATA[oIsOPv_HlkKLJVg3V5q2EBT-KZKo]]></openId>
+    <userId><![CDATA[112358]]></userId>
+    <userType><![CDATA[2]]></userType>
+    <groupId><![CDATA[7469]]></groupId>
+  </user>
+  <user name="  km-01-19">
+    <username><![CDATA[  km-01-19]]></username>
+    <pwd><![CDATA[123]]></pwd>
+    <userMd5><![CDATA[35feb711-f051-41a9-9fff-9c4fc6ffae0d]]></userMd5>
+    <sUpdateTime><![CDATA[2017-06-12 10:21:47]]></sUpdateTime>
+    <openId><![CDATA[oIsOPv4K7yiuKsvzhG59Dr2FCHZY]]></openId>
+    <userId><![CDATA[112358]]></userId>
+    <userType><![CDATA[2]]></userType>
+    <groupId><![CDATA[7469]]></groupId>
+  </user>
+  <user name="刘平先">
+    <username><![CDATA[刘平先]]></username>
+    <pwd><![CDATA[123456]]></pwd>
+    <userMd5><![CDATA[132]]></userMd5>
+    <sUpdateTime><![CDATA[2017-10-28 10:18:55]]></sUpdateTime>
+    <openId><![CDATA[132]]></openId>
+    <userId><![CDATA[132]]></userId>
+    <userType><![CDATA[2]]></userType>
+    <groupId><![CDATA[]]></groupId>
+  </user>
+</Users>

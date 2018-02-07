@@ -1,0 +1,129 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+
+    <link href="../../layui/css/layui.css" rel="stylesheet" />
+    <script src="../../js/jquery.js"></script>
+    <script src="../../js/jquery.cookie.js"></script>
+    <script src="../../layui/layui.js"></script>
+    <script src="../../js/ajaxfileupload.js"></script>
+    <script>
+
+        $(function () {
+            layui.use('layer', function () {
+                layer = layui.layer;
+            })
+            User = $.parseJSON($.cookie("User"));
+            $("#houtai_add").click(function () {
+                //$("#image2").width($("#image1").context.body.clientWidth);
+                $("#btnSearchDiv").css("paddingLeft", $("#batchCmd").context.body.clientWidth / 2 - 275);
+                $("#userCmd").css("display", "none")
+                $("#vehicleCmd").css("display", "none")
+                $("#batchCmd").css("display", "block")
+                $("#batchCmd").height($("#m_body").context.body.clientHeight - 30);
+                // initUpload();
+
+            });
+
+            $("#shangchuang").click(function () {
+                if ($("#file1").val().length > 0) {
+                    ajaxFileUpload();
+                }
+                else {
+                    layer.msg('请选择模板文件...');
+
+                }
+            })
+
+            function ajaxFileUpload() {
+                $.ajaxFileUpload
+                (
+                    {
+                        url: '/VehicleInfo/BatchVeh', //用于文件上传的服务器端请求地址
+                        type: 'post',
+                        data: { userId: User.userId, token: User.token, vehGroupID: 2 }, //此参数非常严谨，写错一个引号都不行
+                        secureuri: false, //一般设置为false
+                        fileElementId: 'file1', //文件上传空间的id属性  <input type="file" id="file" name="file" />
+                        dataType: 'json', //返回值类型 一般设置为json
+                        success: function (data, status)  //服务器成功响应处理函数
+                        {
+
+                        },
+                        error: function (data, status, e)//服务器响应失败处理函数
+                        {
+
+                        }
+                    }
+                )
+                return false;
+            }
+        });
+
+
+    </script>
+        <style> 
+               .batch_stip {
+            position: relative;
+            display: block;
+            box-sizing: border-box;
+            float: left;
+            width: 33.333333%;
+        }
+
+        .batchTop {
+            line-height: 50px;
+            height: 50px;
+            text-align: center;
+            background-color: #009688;
+        }
+
+        .btnSearch {
+            height: 300px;
+          margin:0;
+            text-align: center;
+            padding-top: 50px;
+            padding-left: 38%;
+        }
+    </style>
+</head>
+<body>
+    <div id="batchCmd" style="border: 1px solid #d9d9d9; width: 100%; text-align: center;">
+    
+
+
+
+        <div class="layui-row">
+            <div class="batch_stip">
+                <div class="batchTop">上传</div>
+            </div>
+            <div class="batch_stip">
+                <div class="batchTop">验证</div>
+            </div>
+            <div class="batch_stip">
+                <div class="batchTop">完成</div>
+            </div>
+        </div>
+
+        <div id="btnSearchDiv" class="btnSearch">
+            <div id="btnSearch" style="height: 200px; width: 300px; background-color: #99b786;">
+                <input type="file" id="file1" accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" style="height: 100%; width: 100%; opacity: 0;" name="file" />
+            </div>
+        </div>
+
+        <!--<input type="file" id="f" />
+                    <input type="button" id="b" value="import" onclick="if (f.value == '') alert('请选择xls文件'); else ajaxFileUpload(f.value)" />-->
+
+        <button id="shangchuang" style="width: 200px;" class="layui-btn layui-btn-radius">上 传</button>
+        <div style="text-align: left;">
+            小技巧
+                    <hr style="height: 1px; background-color: #FF5722!important; margin-top: 5px; margin-bottom: 5px;">
+            <span>首次使用,请点击下载最新导入模板!<a href="../../../Content/车辆表模板.xls" style="color:red;cursor:pointer;">车辆表模板下载</a><br />
+                一次批量提交的车辆数不能超过1000台，如果超过限制将提交失败！<br />
+                如果系统提示您有未完成的任务，可能是上次批量导入未完成或此时其他电脑正在用您的账户进行批量导入。<br />
+                请避免您的账号,同一时间,使用不同电脑进行批量导入！！</span>
+        </div>
+    </div>
+</body>
+</html>

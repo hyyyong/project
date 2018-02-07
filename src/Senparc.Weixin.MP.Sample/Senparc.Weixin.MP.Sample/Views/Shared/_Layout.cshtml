@@ -1,0 +1,86 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewBag.Title - 车辆管理</title>
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    @Styles.Render("~/Content/css")
+    <link href="~/Content/darktooltip.min.css" rel="stylesheet" />
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+  
+    <script src="~/Scripts/JS/jquery.cookie.js"></script>
+   
+    <script src="~/Content/danktooltip/js/jquery.darktooltip.min.js"></script>
+    @RenderSection("HeaderContent", false)
+</head>
+<body onresize="setPanelWidth();">
+    <div class="content">
+        <div id="main">
+        
+            @*<div id="mainPanel-all">*@
+       
+            @RenderBody()
+        </div>
+    </div>
+
+
+
+
+    @* <div class="senparc-header">
+            <div class="wrapper">
+                <div class="logo">
+                    <a href="#">
+                        <img src="/images/v2/logo .png" alt="微信SDK" />
+                    </a>
+                </div>
+                <div class="header-title">
+                    <a href="@Url.Action("Index", "Home")" title="微信SDK</a>
+                </div>
+                <div class="navbar-collapse">
+                    <ul class="nav-catalog">
+                        <li><a href="@Url.Action("Index", "Home")">首页</a></li>
+                        <li><a href="@Url.Action("Index", "Menu")">菜单</a></li>
+                        <li><a href="@Url.Action("Index", "SimulateTool")">消息模拟</a></li>
+                        <li><a href="@Url.Action("JumpToMpOAuth", "OpenOAuth")">开放平台</a></li>
+                        <li><a href="@Url.Action("Test", "Cache")">缓存测试</a></li>
+                        <li><a href="https://sdk.weixin.senparc.com@(Url.Action("Index", "Document"))">帮助文档</a></li>                      
+                    </ul>
+                    <div class="clear"></div>
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>*@
+
+
+
+    @*        @if (!IsSectionDefined("catalog"))
+        {
+            <div class="catalog">
+                <a href="@Url.Action("Index", "Menu")">自定义菜单设置工具</a>
+                <a href="@Url.Action("Index", "SimulateTool")">消息模拟工具</a>
+                <a href="@Url.Action("Test", "Cache")">缓存测试</a>
+                <a href="@Url.Action("Index", "AsyncMethods")">异步方法</a>
+                <a href="https://sdk.weixin.senparc.com@(Url.Action("Index", "Document"))">帮助文档</a>
+            </div>
+        }*@
+
+
+    @RenderSection("scripts", required: false)
+    <div style="display: none;">
+        <script>
+            var _hmt = _hmt || [];
+            (function () {
+                var hm = document.createElement("script");
+                hm.src = "//hm.baidu.com/hm.js?a8ad9ff7b9dd4cbb5510f6a929ba085f";
+                var s = document.getElementsByTagName("script")[0];
+                s.parentNode.insertBefore(hm, s);
+            })();
+
+            </script>
+    </div>
+    </div>
+</body>
+</html>

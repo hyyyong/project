@@ -1,0 +1,72 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" style="overflow: hidden;">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>测试</title>
+     <link href="../../Scripts/JS/flexigrid/flexiManage.css" rel="stylesheet" />
+    <link href="../../Content/CSS/pageManagement.css" rel="stylesheet" />
+    <link href="../../Content/reset.css" rel="stylesheet" />
+    <script src="../../Scripts/JS/jquery.js"></script>
+    <script src="../../Scripts/JS/jquery.min.js"></script>
+    <script src="../../Scripts/JS/jquery.cookie.js"></script>
+    <script src="../../Scripts/JS/lang.js"></script>
+    <script src="../../Scripts/JS/lang_fun.js"></script>
+    <script src="../../Scripts/JS/pageStyle.js"></script>
+    <script src="../../Scripts/JS/public.js"></script>
+    <script src="../../Scripts/JS/public1.js"></script>
+    <script src="../../Scripts/JS/userRole.js"></script> 
+    <script src="../../Scripts/JS/hashtable.js"></script>
+    <script src="Main.js"></script>
+    <script src="../../Scripts/JS/flexigrid/flexiManage.js"></script>
+   
+</head>
+<body onresize="setPanelWidth();">
+	<div id="main">
+		<div id="main-topPanel" class="header show clearfix">
+			<div class="header-title">
+	             <div class="logo">
+	                 <img id="logoImg" alt="">
+	                 <span id="spanTitle"></span>
+	             </div>
+            </div>
+			<div class="login-mess" style="display:none;">
+				<div class="login-mess-account">
+					<a class="down"><span class="account"></span><em class="arrows"></em></a>
+					<a class="email" style="display:none;"><i></i></a>
+					<a id="login-out" class="login-out"><span></span></a>
+				</div>
+				<div class="quick-menu">
+					<p><a class="password"></a></p>
+					<p id="perfectInfo" style="display:none;"><a class="perfectInfo"></a></p>
+				</div>
+			</div>
+			<div id="rightTabs" class="nav-bar clearfix"></div>
+		</div>
+		<div id="mainPanel-all">
+		</div>
+	</div>
+	<!-- 公告滚动条 -->
+	<style>
+		#coverWeather{position:fixed;top:3px;right: 10px;height:25px;width: 285px;z-index:2;background-color:white;opacity:0;filter: "alpha(opacity=0)";filter: alpha(opacity=0);zoom:1;}
+		#weatherForecast{position:fixed;top:3px;right: 20px;height:15px;width: 285px;display:none;}
+		#blackWeather{position:fixed;top:3px;right: 20px;height:15px;width: 285px;display:none;}
+		.scrollmsg{position:fixed;top: 57px;right: 10px;height:15px;width: 300px;overflow: hidden;}
+		.scrollmsg .scroll_content{position: absolute;left: 300px;overflow: hidden;white-space: nowrap;color: #fff;cursor: pointer;}
+	</style>
+
+	<div id="coverWeather"></div>
+	<div id="blackWeather"><iframe width="280px" scrolling="no" height="18" frameborder="0" allowtransparency="true" src="http://i.tianqi.com/index.php?c=code&id=1&icon=1&wind=0&num=1"></iframe></div>
+	<div id="weatherForecast" ><iframe width="285px" scrolling="no" height="18"   frameborder="0" allowtransparency="true" src="http://i.tianqi.com/index.php?c=code&id=1&color=%23FFFFFF&icon=1&wind=1&num=1" ></iframe></div>
+
+	<div class="scrollmsg"></div>
+</body>
+	<script>
+	    $(document).ready(function () {
+	        var GetHTML = location.href;
+	        var IsChineseLanguage = GetHTML.indexOf("lang=zh");
+	        if (IsChineseLanguage > 0) {
+	            $('#weatherForecast').show();
+	        }
+	    })
+	</script>
+</html>
