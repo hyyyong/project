@@ -114,10 +114,10 @@ namespace Senparc.Weixin.MP.Sample.Controllers
 
 
 
-        public JsonResult GetVehicleDetail(string userId, string token, int vehicleId, string type)
+        public JsonResult GetVehicleDetail(string userId, string token, int vehicleId,int groupID, string type)
         {
             VehDetail vehDetail = null;
-            if (M_VehicleInfo.GetVehDetail(vehicleId, out vehDetail))
+            if (M_VehicleInfo.GetVehDetail(vehicleId,groupID, out vehDetail))
             {
                 if (vehDetail != null)
                     return Json(new { flag = 1, msg = "查询成功", obj = vehDetail }, JsonRequestBehavior.AllowGet);
@@ -222,6 +222,6 @@ namespace Senparc.Weixin.MP.Sample.Controllers
 
         #endregion
 
-
+      
     }
 }

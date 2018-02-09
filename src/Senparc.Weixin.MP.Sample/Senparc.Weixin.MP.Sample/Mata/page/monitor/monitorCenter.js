@@ -500,10 +500,8 @@ function trueTimeMsg() {
 var treeData = function () {
    // var group = new Array();
     //var vehicle = new Array();
-
         //group = $.parseJSON(localStorage.getItem("groupList"));
-        //vehicle = $.parseJSON(localStorage.getItem("vehicleList"));       
-   
+        //vehicle = $.parseJSON(localStorage.getItem("vehicleList")); 
     var root = new Array();
     for (var i = 0; i < groupArrayShow.length; i++) {
       
@@ -532,8 +530,7 @@ var treeData = function () {
             child.hasOpen = false;
            
             bindChildVeh(vehicleInfo, child, groupArrayShow[i]["VehGroupID"].toString());
-            root.push(child);
-       
+            root.push(child);       
     }
     return root;
 }

@@ -18,6 +18,8 @@ namespace Senparc.Weixin.MP.Sample.Controllers
 {
     using Senparc.Weixin.MP.MvcExtension;
     using Senparc.Weixin.MP.Sample.CommonService.CustomMessageHandler;
+    using Manager;
+    using Model;
 
     public partial class WeixinController : Controller
     {
@@ -233,5 +235,8 @@ namespace Senparc.Weixin.MP.Sample.Controllers
                     );
             return Content(result);
         }
+
+
+        
     }
 }

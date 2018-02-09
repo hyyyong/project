@@ -167,6 +167,7 @@
     <Compile Include="Controllers\AppBaseController.cs" />
     <Compile Include="Controllers\AppBingVehController.cs" />
     <Compile Include="Controllers\AppCmdController.cs" />
+    <Compile Include="Controllers\AppDataPostController.cs" />
     <Compile Include="Controllers\AppLoginController.cs" />
     <Compile Include="Controllers\AppReportController.cs" />
     <Compile Include="Controllers\AppSetController.cs" />
@@ -271,6 +272,7 @@
     <Content Include="Images\Main\search.jpg" />
     <Content Include="Images\Main\sitemap.png" />
     <Content Include="Images\Main\tree_user.png" />
+    <Content Include="Mata\img\upbatch.png" />
     <Content Include="Mata\css\animate.min.css" />
     <Content Include="Mata\css\bootstrap.min.css" />
     <Content Include="Mata\css\font-awesome.min93e3.css" />

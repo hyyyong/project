@@ -202,7 +202,7 @@ namespace Manager
                     catch (Exception ex)
                     {
                         sqlts.Rollback();
-                        info = "处理错误";
+                        info = "处理错误1";
                         return false;
                     }
 
@@ -213,7 +213,7 @@ namespace Manager
             }
             catch (Exception ex)
             {
-                info = "处理错误";
+                info = "处理错误2";
                 return false;
             }
         }

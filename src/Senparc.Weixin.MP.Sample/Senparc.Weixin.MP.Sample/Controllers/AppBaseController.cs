@@ -65,7 +65,7 @@ namespace Senparc.Weixin.MP.Sample.Controllers
         //}
 
 
-        //添加车辆
+        //添加车辆 客户端有用
         [HttpPost]
         [System.Web.Http.ActionName("addVehicel")]
         public object AppAddVehicel(Tb_Vehicel temp)

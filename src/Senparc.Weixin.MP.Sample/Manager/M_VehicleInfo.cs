@@ -216,7 +216,7 @@ namespace Manager
                     //int count1 = sqlcomm.ExecuteNonQuery();
 
 
-                    if (count < 1 )
+                    if (count < 1)
                     {
                         sqlts.Rollback();
                         info = "删除车组失败";
@@ -247,90 +247,116 @@ namespace Manager
         {
 
             vehicleList = null;
-            DBHelp dbhelp = new DBHelp();
-            DataTable table;
-            string sqlCmd = @"select Vehicle.id,Vehicle.plate,Vehicle.simNo,Vehicle.deviceId,Vehicle.deviceType,webpass,Vehicle.ownerName,Vehicle.ownerPhone,Vehicle.serverEndTime,VehGroupMain.vehGroupId,VehGroupMain.vehGroupName,Vehicle.ipAddress from Vehicle INNER JOIN VehicleDetail ON Vehicle.Id = VehicleDetail.VehID  INNER join VehGroupMain on VehGroupMain.VehGroupID=VehicleDetail.VehGroupID  where VehicleDetail.VehGroupID=" + GroupID + "  and (Vehicle.delflag=0 or Vehicle.DelFlag=null)";
-            if (!dbhelp.QueryDataSet(SqlConfig.CONNECTION_STRING, sqlCmd, new SqlParameter[] { }, false, out table))
-                return false;
-
             vehicleList = new List<VehList>();
-            if (table.Rows.Count == 0)
+            var redis = Wdj.Redis.Helper.RedisHelper.HashService;
+            if (redis.KeyExists("SQL_Group_" + GroupID))
+            {
+                Dictionary<string, VehList> m_value = redis.HashGetAll<VehList>("SQL_Group_" + GroupID);
+                foreach (var item in m_value)
+                {
+                    vehicleList.Add(item.Value);
+                }
+                return true;
+            }
+            else
+            {
+                DBHelp dbhelp = new DBHelp();
+                DataTable table;
+                string sqlCmd = @"select Vehicle.id,Vehicle.plate,Vehicle.simNo,Vehicle.deviceId,Vehicle.deviceType,webpass,Vehicle.ownerName,Vehicle.ownerPhone,Vehicle.serverEndTime,VehGroupMain.vehGroupId,VehGroupMain.vehGroupName,Vehicle.ipAddress from Vehicle INNER JOIN VehicleDetail ON Vehicle.Id = VehicleDetail.VehID  INNER join VehGroupMain on VehGroupMain.VehGroupID=VehicleDetail.VehGroupID  where VehicleDetail.VehGroupID=" + GroupID + "  and (Vehicle.delflag=0 or Vehicle.DelFlag=null)";
+                if (!dbhelp.QueryDataSet(SqlConfig.CONNECTION_STRING, sqlCmd, new SqlParameter[] { }, false, out table))
+                    return false;
+
+
+                if (table.Rows.Count == 0)
+                    return true;
+
+                for (int i = 0; i < table.Rows.Count; i++)
+                {
+                    VehList veh = new VehList();
+                    veh.vehicleId = Convert.ToInt32(table.Rows[i]["Id"]);
+                    veh.plate = table.Rows[i]["plate"].ToString();
+                    veh.simNo = table.Rows[i]["simNo"].ToString();
+                    veh.deviceId = table.Rows[i]["deviceId"].ToString();
+                    veh.deviceType = table.Rows[i]["deviceType"].ToString();
+                    veh.webpass = table.Rows[i]["webpass"].ToString();
+                    veh.ownerName = table.Rows[i]["ownerName"].ToString();
+
+                    veh.ownerPhone = table.Rows[i]["ownerPhone"].ToString();
+                    veh.serverEndTime = table.Rows[i]["serverEndTime"].ToString();
+                    veh.vehGroupId = Convert.ToInt32(table.Rows[i]["vehGroupId"]);
+                    veh.vehGroupName = table.Rows[i]["vehGroupName"].ToString();
+                    veh.ipAddress = table.Rows[i]["ipAddress"].ToString();
+
+                    redis.HashSet("SQL_Group_" + GroupID, "SQL_Vehid_" + veh.vehicleId, veh);
+                    vehicleList.Add(veh);
+                }
                 return true;
 
-            for (int i = 0; i < table.Rows.Count; i++)
-            {
-                VehList veh = new VehList();
-                veh.vehicleId = Convert.ToInt32(table.Rows[i]["Id"]);
-                veh.plate = table.Rows[i]["plate"].ToString();
-                veh.simNo = table.Rows[i]["simNo"].ToString();
-                veh.deviceId = table.Rows[i]["deviceId"].ToString();
-                veh.deviceType = table.Rows[i]["deviceType"].ToString();
-                veh.webpass = table.Rows[i]["webpass"].ToString();
-                veh.ownerName = table.Rows[i]["ownerName"].ToString();
-
-                veh.ownerPhone = table.Rows[i]["ownerPhone"].ToString();
-                veh.serverEndTime = table.Rows[i]["serverEndTime"].ToString();
-                veh.vehGroupId = Convert.ToInt32(table.Rows[i]["vehGroupId"]);
-                veh.vehGroupName = table.Rows[i]["vehGroupName"].ToString();
-                veh.ipAddress = table.Rows[i]["ipAddress"].ToString();               
-                vehicleList.Add(veh);
             }
-
-            return true;
         }
 
-        public static bool GetVehDetail(int id, out VehDetail veh)
+        public static bool GetVehDetail(int id, int groupID, out VehDetail veh)
         {
-
             veh = null;
-            DBHelp dbhelp = new DBHelp();
-            DataTable table;
-            string sqlCmd = @"SELECT Vehicle.*, VehicleDetail.VehGroupID,VehGroupMain.VehGroupName, FROM Vehicle left JOIN VehicleDetail ON Vehicle.Id = VehicleDetail.VehID left join VehGroupMain   on VehGroupMain.VehGroupID=VehicleDetail.VehGroupID WHERE(VehicleDetail.VehID = @vehid)  and ((Vehicle.delflag!=1) or(Vehicle.delflag is null))  ";
-
-            if (!dbhelp.QueryDataSet(SqlConfig.CONNECTION_STRING, sqlCmd, new SqlParameter[] { new SqlParameter("vehid", id) }, false, out table))
-                return false;
-
-            if (table.Rows.Count == 0)
-                return true;
-
             veh = new VehDetail();
-            veh.vehicleId = Convert.ToInt32(table.Rows[0]["Id"]);
-            veh.plate = table.Rows[0]["plate"].ToString();
-            veh.simNo = table.Rows[0]["simNo"].ToString();
-            veh.deviceId = table.Rows[0]["deviceId"].ToString();
-            veh.deviceType = table.Rows[0]["deviceType"].ToString();
+            var redis = Wdj.Redis.Helper.RedisHelper.HashService;
+            if (redis.HashExists("SQL_Group_" + groupID, "SQL_Vehid_" + id))
+            {
+                veh = redis.HashGet<VehDetail>("SQL_Group_" + groupID, "SQL_Vehid_" + id);
+                return true;
+            }
+            else
+            {
+                DBHelp dbhelp = new DBHelp();
+                DataTable table;
+                string sqlCmd = @"SELECT Vehicle.*, VehicleDetail.VehGroupID,VehGroupMain.VehGroupName, FROM Vehicle left JOIN VehicleDetail ON Vehicle.Id = VehicleDetail.VehID left join VehGroupMain   on VehGroupMain.VehGroupID=VehicleDetail.VehGroupID WHERE(VehicleDetail.VehID = @vehid)  and ((Vehicle.delflag!=1) or(Vehicle.delflag is null))  ";
 
-            veh.webpass = table.Rows[0]["webpass"].ToString();
-            veh.frameNo = table.Rows[0]["frameNo"].ToString();
-            veh.engineNo = table.Rows[0]["engineNo"].ToString();
-            veh.plateColor = table.Rows[0]["plateColor"].ToString();
-            veh.vehicleColor = table.Rows[0]["vehicleColor"].ToString();
+                if (!dbhelp.QueryDataSet(SqlConfig.CONNECTION_STRING, sqlCmd, new SqlParameter[] { new SqlParameter("vehid", id) }, false, out table))
+                    return false;
 
-            veh.ownerName = table.Rows[0]["ownerName"].ToString().Trim();
-            veh.ownerPhone = table.Rows[0]["ownerPhone"].ToString();
-            veh.ownerAddress = table.Rows[0]["ownerAddress"].ToString();
-            veh.vehicleType = table.Rows[0]["vehicleType"].ToString().Trim();
-            veh.certificateNo = table.Rows[0]["certificateNo"].ToString();
+                if (table.Rows.Count == 0)
+                    return true;
 
-            veh.ICCID = table.Rows[0]["ICCID"].ToString();
-            veh.installTime = table.Rows[0]["installTime"] == DBNull.Value ? "" : Convert.ToDateTime(table.Rows[0]["installTime"]).ToString("yyyy-MM-dd HH:mm:ss");
-            veh.installPhone = table.Rows[0]["installPhone"].ToString();
-            veh.installPerson = table.Rows[0]["installPerson"].ToString();
-            veh.installAddress = table.Rows[0]["installAddress"].ToString();
+                veh.vehicleId = Convert.ToInt32(table.Rows[0]["Id"]);
+                veh.plate = table.Rows[0]["plate"].ToString();
+                veh.simNo = table.Rows[0]["simNo"].ToString();
+                veh.deviceId = table.Rows[0]["deviceId"].ToString();
+                veh.deviceType = table.Rows[0]["deviceType"].ToString();
 
-            veh.contactName = table.Rows[0]["contactName"].ToString();
-            veh.contactPhone = table.Rows[0]["contactPhone"].ToString();
-            veh.marks = table.Rows[0]["marks"].ToString();
-            veh.activeTime = table.Rows[0]["activeTime"] == DBNull.Value ? "" : Convert.ToDateTime(table.Rows[0]["activeTime"]).ToString("yyyy-MM-dd HH:mm:ss");
-            veh.serverEndTime = table.Rows[0]["serverEndTime"] == DBNull.Value ? "" : Convert.ToDateTime(table.Rows[0]["serverEndTime"]).ToString("yyyy-MM-dd HH:mm:ss");
+                veh.webpass = table.Rows[0]["webpass"].ToString();
+                veh.frameNo = table.Rows[0]["frameNo"].ToString();
+                veh.engineNo = table.Rows[0]["engineNo"].ToString();
+                veh.plateColor = table.Rows[0]["plateColor"].ToString();
+                veh.vehicleColor = table.Rows[0]["vehicleColor"].ToString();
 
-            veh.vehGroupId = Convert.ToInt32(table.Rows[0]["vehGroupId"].ToString());
-            veh.vehGroupName = table.Rows[0]["vehGroupName"].ToString();
-            veh.ipAddress = table.Rows[0]["ipAddress"].ToString();
-            veh.delFlag = Convert.ToInt32(table.Rows[0]["delFlag"].ToString());
-            veh.isStore = Convert.ToInt32(table.Rows[0]["isStore"].ToString());
-            veh.storeUserID = Convert.ToInt32(table.Rows[0]["storeUserID"].ToString());
-            return true;
+                veh.ownerName = table.Rows[0]["ownerName"].ToString().Trim();
+                veh.ownerPhone = table.Rows[0]["ownerPhone"].ToString();
+                veh.ownerAddress = table.Rows[0]["ownerAddress"].ToString();
+                veh.vehicleType = table.Rows[0]["vehicleType"].ToString().Trim();
+                veh.certificateNo = table.Rows[0]["certificateNo"].ToString();
+
+                veh.ICCID = table.Rows[0]["ICCID"].ToString();
+                veh.installTime = table.Rows[0]["installTime"] == DBNull.Value ? "" : Convert.ToDateTime(table.Rows[0]["installTime"]).ToString("yyyy-MM-dd HH:mm:ss");
+                veh.installPhone = table.Rows[0]["installPhone"].ToString();
+                veh.installPerson = table.Rows[0]["installPerson"].ToString();
+                veh.installAddress = table.Rows[0]["installAddress"].ToString();
+
+                veh.contactName = table.Rows[0]["contactName"].ToString();
+                veh.contactPhone = table.Rows[0]["contactPhone"].ToString();
+                veh.marks = table.Rows[0]["marks"].ToString();
+                veh.activeTime = table.Rows[0]["activeTime"] == DBNull.Value ? "" : Convert.ToDateTime(table.Rows[0]["activeTime"]).ToString("yyyy-MM-dd HH:mm:ss");
+                veh.serverEndTime = table.Rows[0]["serverEndTime"] == DBNull.Value ? "" : Convert.ToDateTime(table.Rows[0]["serverEndTime"]).ToString("yyyy-MM-dd HH:mm:ss");
+
+                veh.vehGroupId = Convert.ToInt32(table.Rows[0]["vehGroupId"].ToString());
+                veh.vehGroupName = table.Rows[0]["vehGroupName"].ToString();
+                veh.ipAddress = table.Rows[0]["ipAddress"].ToString();
+                veh.delFlag = Convert.ToInt32(table.Rows[0]["delFlag"].ToString());
+                veh.isStore = Convert.ToInt32(table.Rows[0]["isStore"].ToString());
+                veh.storeUserID = Convert.ToInt32(table.Rows[0]["storeUserID"].ToString());
+
+                redis.HashSet("SQL_Group_" + groupID, "SQL_Vehid_" + veh.vehicleId, veh);
+                return true;
+            }
         }
 
 
@@ -367,7 +393,7 @@ namespace Manager
                 return 2;
             }
             #endregion
-          
+
             SqlConnection sqlconn = new SqlConnection(SqlConfig.CONNECTION_STRING);
             sqlconn.Open();
             SqlCommand sqlcomm = new SqlCommand();
@@ -379,12 +405,12 @@ namespace Manager
             {
                 string sqlCmd = "";
                 #region
-                sqlCmd = @"if not exists(select id from vehicle where plate='" + plate + "' or deviceId='" + deviceId + "' or simNo='" + simNo + "' or "+
-                    "ipaddress='" + strVehIP + "') begin INSERT INTO Vehicle"+
-                    "(plate,simNo,deviceid,deviceType,ipaddress,webpass,frameNo,engineNo,plateColor,vehicleColor,ownerName,ownerPhone,ownerAddress,"+
+                sqlCmd = @"if not exists(select id from vehicle where plate='" + plate + "' or deviceId='" + deviceId + "' or simNo='" + simNo + "' or " +
+                    "ipaddress='" + strVehIP + "') begin INSERT INTO Vehicle" +
+                    "(plate,simNo,deviceid,deviceType,ipaddress,webpass,frameNo,engineNo,plateColor,vehicleColor,ownerName,ownerPhone,ownerAddress," +
                     "vehicleType,certificateNo,ICCID,installTime,installPhone,installPerson,installAddress,contactName,contactPhone,activeTime,serverEndTime,marks," +
                     "isStore,delFlag,CreateTime,UpdateTime,StoreUserID) Values " +
-                    "(@车牌号码,@SIM卡号,@终端编号,@终端类型,@伪IP,@服务密码,@车架编号,@发动机编号,@车牌颜色,@车主姓名,@车主电话,@车主地址,"+
+                    "(@车牌号码,@SIM卡号,@终端编号,@终端类型,@伪IP,@服务密码,@车架编号,@发动机编号,@车牌颜色,@车主姓名,@车主电话,@车主地址," +
                     "@车主地址,@车辆种类,@证件号,@ICCID,@安装日期,@安装人电话,@安装人员,@安装地点,@联系人,@联系人电话,@激活时间,@服务结束时间,@备注," +
                     "@isStore,@delFlag,getDate(),getDate(),@StoreUserID) select @@IDENTITY end " +
                     " else begin declare @Return varchar(200) set @Return='' if exists(select id from vehicle where plate='" + plate + "') set @Return=@Return+' 车牌' " +
@@ -413,7 +439,7 @@ namespace Manager
 
                 sqlcomm.Parameters.AddWithValue("安装日期", installTime == null ? "2000-01-01" : installTime);
                 sqlcomm.Parameters.AddWithValue("安装人电话", installPhone == null ? "" : installPhone);
-                sqlcomm.Parameters.AddWithValue("安装人员", installPerson == null ? "" : installPerson);                
+                sqlcomm.Parameters.AddWithValue("安装人员", installPerson == null ? "" : installPerson);
                 sqlcomm.Parameters.AddWithValue("安装地点", installAddress);
                 sqlcomm.Parameters.AddWithValue("联系人", contactName == null ? "" : contactName);
                 sqlcomm.Parameters.AddWithValue("联系人电话", contactPhone == null ? "" : contactPhone);
@@ -480,6 +506,7 @@ namespace Manager
                     sqlconn.Close();
                     result = vehID + "/" + vehGroupId + "," + vehGroupId;
                     info = "添加车辆成功";
+                    UpdateVehRedis(vehID);  
                     return 1;
                 }
                 else
@@ -528,7 +555,7 @@ namespace Manager
                 return 2;
             }
             #endregion
-          
+
 
             SqlConnection sqlconn = new SqlConnection(SqlConfig.CONNECTION_STRING);
             sqlconn.Open();
@@ -565,14 +592,14 @@ namespace Manager
                         }
                     }
                 }
-                
 
-                sqlCmd = @"if not exists(select id from vehicle where (plate='" + plate + "' or deviceid='" + deviceId + "' or simNo='" + simNo + "' or ipaddress='" + strVehIP + "'" + ") and id!=" + vehicleId + " ) begin update Vehicle set " + "plate=@车牌号码,simNo==@SIM卡号,deviceId=@终端编号,ipaddress=@伪IP,deviceType=@终端类型,webpass=@服务密码,"+
+
+                sqlCmd = @"if not exists(select id from vehicle where (plate='" + plate + "' or deviceid='" + deviceId + "' or simNo='" + simNo + "' or ipaddress='" + strVehIP + "'" + ") and id!=" + vehicleId + " ) begin update Vehicle set " + "plate=@车牌号码,simNo==@SIM卡号,deviceId=@终端编号,ipaddress=@伪IP,deviceType=@终端类型,webpass=@服务密码," +
                     "engineNo=@发动机编号,frameNo=@车架编号,plateColor=@车牌颜色,vehicleColor=@车牌颜色,ownerName=@车主姓名,ownerPhone=@车主电话" +
                      "ownerAddress=@车主地址,vehicleType=@车辆种类,certificateNo=@证件号,ICCID=@ICCID,installTime=@安装日期,installPhone=@安装人电话" +
                       "installPerson=@安装人员,installAddress=@安装地点,contactName=@联系人,contactPhone=@联系人电话,activeTime=@激活时间,serverEndTime=@服务结束时间" +
                       "marks=@备注,ipaddress=@伪IP,UpdateTime=getdate()" +
-                                     "  where id=@ID select '1' end else begin declare @Return varchar(200) set @Return=''"+
+                                     "  where id=@ID select '1' end else begin declare @Return varchar(200) set @Return=''" +
                                     "if exists(select id from vehicle where cph='" + plate + "' and id!=" + vehicleId.ToString() + " ) set @Return=@Return+' 车牌' " +
                                     " if exists(select id from vehicle where simNo='" + simNo + "' and id!=" + vehicleId.ToString() + " ) set @Return=@Return+' SIM卡号' " +
                                     " if exists(select id from vehicle where deviceId='" + deviceId + "' and id!=" + vehicleId.ToString() + " ) set @Return=@Return+' 终端编号' " +
@@ -587,7 +614,7 @@ namespace Manager
                 sqlcomm.Parameters.AddWithValue("伪IP", strVehIP);
                 sqlcomm.Parameters.AddWithValue("终端类型", deviceType);
                 sqlcomm.Parameters.AddWithValue("服务密码", webpass == null ? "" : webpass);
-                sqlcomm.Parameters.AddWithValue("车架编号",frameNo == null ? "" : frameNo);
+                sqlcomm.Parameters.AddWithValue("车架编号", frameNo == null ? "" : frameNo);
                 sqlcomm.Parameters.AddWithValue("发动机编号", engineNo == null ? "" : engineNo);
                 sqlcomm.Parameters.AddWithValue("车牌颜色", plateColor == null ? "" : plateColor);
                 sqlcomm.Parameters.AddWithValue("车辆颜色", vehicleColor == null ? "" : vehicleColor);
@@ -683,11 +710,11 @@ namespace Manager
                         sqlcomm.CommandText = "insert into Tab_Operate(TheID,OpType,OpTime,OpUser,UserName,TheName,Remark,GroupName,Type) values(" + vehicleId + ",'修改','" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "'," + userId + "," + iUserName + ",'" + iPlate + "','" + editInfo + "'," + vehGroupId + ",1)";
                         sqlcomm.ExecuteNonQuery();
                     }
-                  
+
                     sqlts.Commit();
                     sqlconn.Close();
                     info = "编辑车辆成功";
-                    DBHelp dbhelp = new DBHelp();                   
+                    UpdateVehRedis(vehicleId);          
                     return 1;
 
                 }
@@ -751,6 +778,8 @@ left join VehGroupMain on VehicleDetail.VehGroupID=VehGroupMain.VehGroupID where
                     {
                         sqlts.Commit();
                         sqlconn.Close();
+                        var redis = Wdj.Redis.Helper.RedisHelper.HashService;
+                        redis.HashDelete("SQL_Group_" + vehGroupID, "SQL_Vehid_" + vehicleId);
                         return true;
                     }
                     else
@@ -846,7 +875,66 @@ left join VehGroupMain on VehicleDetail.VehGroupID=VehGroupMain.VehGroupID where
         }
         #endregion
 
+        #region 车辆资料更新Redis
+        public static bool UpdateVehRedis(int id)
+        {
 
+            VehDetail veh = new VehDetail();
+            var redis = Wdj.Redis.Helper.RedisHelper.HashService;
+
+            DBHelp dbhelp = new DBHelp();
+            DataTable table;
+            string sqlCmd = @"SELECT Vehicle.*, VehicleDetail.VehGroupID,VehGroupMain.VehGroupName, FROM Vehicle left JOIN VehicleDetail ON Vehicle.Id = VehicleDetail.VehID left join VehGroupMain   on VehGroupMain.VehGroupID=VehicleDetail.VehGroupID WHERE(VehicleDetail.VehID = @vehid)  and ((Vehicle.delflag!=1) or(Vehicle.delflag is null))  ";
+
+            if (!dbhelp.QueryDataSet(SqlConfig.CONNECTION_STRING, sqlCmd, new SqlParameter[] { new SqlParameter("vehid", id) }, false, out table))
+                return false;
+
+            if (table.Rows.Count == 0)
+                return true;
+
+            veh.vehicleId = Convert.ToInt32(table.Rows[0]["Id"]);
+            veh.plate = table.Rows[0]["plate"].ToString();
+            veh.simNo = table.Rows[0]["simNo"].ToString();
+            veh.deviceId = table.Rows[0]["deviceId"].ToString();
+            veh.deviceType = table.Rows[0]["deviceType"].ToString();
+
+            veh.webpass = table.Rows[0]["webpass"].ToString();
+            veh.frameNo = table.Rows[0]["frameNo"].ToString();
+            veh.engineNo = table.Rows[0]["engineNo"].ToString();
+            veh.plateColor = table.Rows[0]["plateColor"].ToString();
+            veh.vehicleColor = table.Rows[0]["vehicleColor"].ToString();
+
+            veh.ownerName = table.Rows[0]["ownerName"].ToString().Trim();
+            veh.ownerPhone = table.Rows[0]["ownerPhone"].ToString();
+            veh.ownerAddress = table.Rows[0]["ownerAddress"].ToString();
+            veh.vehicleType = table.Rows[0]["vehicleType"].ToString().Trim();
+            veh.certificateNo = table.Rows[0]["certificateNo"].ToString();
+
+            veh.ICCID = table.Rows[0]["ICCID"].ToString();
+            veh.installTime = table.Rows[0]["installTime"] == DBNull.Value ? "" : Convert.ToDateTime(table.Rows[0]["installTime"]).ToString("yyyy-MM-dd HH:mm:ss");
+            veh.installPhone = table.Rows[0]["installPhone"].ToString();
+            veh.installPerson = table.Rows[0]["installPerson"].ToString();
+            veh.installAddress = table.Rows[0]["installAddress"].ToString();
+
+            veh.contactName = table.Rows[0]["contactName"].ToString();
+            veh.contactPhone = table.Rows[0]["contactPhone"].ToString();
+            veh.marks = table.Rows[0]["marks"].ToString();
+            veh.activeTime = table.Rows[0]["activeTime"] == DBNull.Value ? "" : Convert.ToDateTime(table.Rows[0]["activeTime"]).ToString("yyyy-MM-dd HH:mm:ss");
+            veh.serverEndTime = table.Rows[0]["serverEndTime"] == DBNull.Value ? "" : Convert.ToDateTime(table.Rows[0]["serverEndTime"]).ToString("yyyy-MM-dd HH:mm:ss");
+
+            veh.vehGroupId = Convert.ToInt32(table.Rows[0]["vehGroupId"].ToString());
+            veh.vehGroupName = table.Rows[0]["vehGroupName"].ToString();
+            veh.ipAddress = table.Rows[0]["ipAddress"].ToString();
+            veh.delFlag = Convert.ToInt32(table.Rows[0]["delFlag"].ToString());
+            veh.isStore = Convert.ToInt32(table.Rows[0]["isStore"].ToString());
+            veh.storeUserID = Convert.ToInt32(table.Rows[0]["storeUserID"].ToString());
+
+            redis.HashSet("SQL_Group_" + veh.vehGroupId, "SQL_Vehid_" + veh.vehicleId, veh);
+            return true;
+
+        }
+
+        #endregion
     }
     public class FRelation
     {
